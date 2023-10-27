@@ -117,6 +117,30 @@ function mkdir.mp3() {
 }
 ```
 
+## Encrypt/decrypt tar archives
+
+```
+function tar.encrypt() {
+    # $1...: files or folders to encrypt
+    if [ "$#" == 0 ]; then
+        echo Usage: encrypt \<file\> [\<file\> ...]
+        return 1
+    else
+        tar czvpf - "$@" | gpg --symmetric --cipher-algo aes256 -o archive.tar.gz.gpg
+    fi
+}
+
+function tar.decrypt() {
+    # $1: archive to decrypt
+    if [ "$#" != 1 ]; then
+        echo Usage: decrypt \<archive\>
+        return 1
+    else
+        gpg -d $1 | tar xzvf -
+    fi
+}
+```
+
 ## Appendix: Bash programming reference
 
 <https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html>
